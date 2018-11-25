@@ -82,10 +82,10 @@ def wiener_fish():
 def wiener_word():
     im_word = np.float32(mpimg.imread('2.jpg')) / 255
     # Set some coefficient of motion filter and wiener filter
-    t = 0.1
-    a = -0.0001
-    b = 0.0001
-    k = 0.5
+    t = 1
+    a = 0.0005
+    b = -0.0005
+    k = 2
 
     # Use motion filter as degradation filter
     h = np.empty(shape=im_word.shape)
@@ -128,6 +128,8 @@ def notch():
                 for y in range(10, -10, -1):
                     if f_spec[idx[i, 0] - x, idx[i, 1] - y] > 140:
                         f_shift[idx[i, 0] - x, idx[i, 1] - y] = 0
+    # plt.imshow(np.uint8(f_spec), 'gray')
+    # plt.show()
 
     # Back to time domain and plot/save image
     f_shift_back = ifftshift(f_shift)
@@ -148,6 +150,7 @@ def band_reject():
     s_spec = np.log(np.abs(s_shift))
     s_spec = np.uint8(255 * (s_spec - s_spec.min()) / (s_spec.max() - s_spec.min()))
     # plt.imshow(s_spec, cmap='gray')
+    # plt.show()
 
     # By observing power spectrum of image and produce band reject filter to block the pattern noise
     idx = np.argwhere(s_spec > 190)
